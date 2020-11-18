@@ -20,6 +20,9 @@ class Game(context: Context?) : View(context) {
     private var cot: Bitmap
     var paint: Paint = Paint()
 
+
+    val HIGHT_COT = getScreenHeight()/2 -200
+
     init {
 
         fishCuiXuong = BitmapFactory.decodeResource(resources, R.drawable.fish_22)
@@ -28,19 +31,18 @@ class Game(context: Context?) : View(context) {
 
         fishLaoLen = Bitmap.createScaledBitmap(fishLaoLen, 200, 150, true)
         fishCuiXuong = Bitmap.createScaledBitmap(fishCuiXuong, 200, 150, true)
-        cot = Bitmap.createScaledBitmap(cot, 100, 700, true)
+        cot = Bitmap.createScaledBitmap(cot, 100, HIGHT_COT.toInt(), true)
         paint.color = Color.BLUE
         paint.textSize = 100f
     }
 
-    var cot1Height = 700
-    var cot2Height = 700
+
 
     var cot1X = getScreenWidth() - 100f
     var cot1Y = 0f
 
     var cot2X = getScreenWidth() - 100f
-    var cot2Y = getScreenHeight()- 650f
+    var cot2Y = getScreenHeight()- HIGHT_COT
 
     var diem = 0
 
@@ -73,15 +75,15 @@ class Game(context: Context?) : View(context) {
             cot1X = getScreenWidth().toFloat()
             cot2X = getScreenWidth().toFloat()
         }
-        cot1X -=5
-        cot2X -=5
+        cot1X -=15
+        cot2X -=15
         canvas.drawText("$diem", getScreenWidth()/2, 100f, paint)
 
         if (gameOver()) {
             diem = 0
             Toast.makeText(context, "Gamme ioverr", Toast.LENGTH_SHORT).show()
-            
-            Thread.sleep(1000)
+            canvas!!.drawBitmap(cot, cot1X, cot1Y, paint)
+            canvas.drawBitmap(cot, cot2X, cot2Y, paint)
         } else {
             if (fishX+200 == cot1X) diem++
         }
@@ -93,7 +95,7 @@ class Game(context: Context?) : View(context) {
     var ontClick = false
 
     fun gameOver(): Boolean {
-        if ((fishY <= 700 && fishX+200 >= cot1X) || (fishY >= getScreenHeight() - 700 && fishX+200 == cot2X)) {
+        if ((fishY <= HIGHT_COT && fishX+200 >= cot1X) || (fishY >= getScreenHeight() - HIGHT_COT && fishX+200 == cot2X)) {
             return true
         }
         return false
